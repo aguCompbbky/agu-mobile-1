@@ -61,11 +61,11 @@ class MenuPage extends StatelessWidget {
         icon: Icons.people,
         iconColor: Colors.white,
         page: GelistiricilerScreen()),
-    MenuItem(
-        title: "devamsızlık",
-        icon: Icons.people,
-        iconColor: Colors.white,
-        page: AttendancePage()),
+    // MenuItem(
+    //     title: "devamsızlık",
+    //     icon: Icons.people,
+    //     iconColor: Colors.white,
+    //     page: AttendancePage()),
   ];
 
   MenuPage({super.key});

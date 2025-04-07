@@ -21,18 +21,18 @@ Widget bottomBar2(BuildContext context, int currentIndex) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Timetabledetail()));
             break;
-          case 1:
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => ClassScheduleScreen()));
-            break;
-
           // case 1:
-          //   Navigator.pushReplacement(
-          //       context,
-          //       MaterialPageRoute(
-          //           builder: (context) =>
-          //               const NewsPage(url: "https://agunews.agu.edu.tr/")));
+          //   Navigator.pushReplacement(context,
+          //       MaterialPageRoute(builder: (context) => ClassScheduleScreen()));
           //   break;
+
+          case 1:
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const NewsPage(url: "https://agunews.agu.edu.tr/")));
+            break;
           case 2:
             Navigator.pushReplacement(
                 context,

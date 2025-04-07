@@ -8,6 +8,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1065657635325:android:252ab82011171e00344994",
+        "android_client_info": {
+          "package_name": "com.agu.agumobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeCBL8Ks7Ws_eqiERkegQ4BpUOSlIc-a8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1065657635325:android:cb4572290869e8ec344994",
         "android_client_info": {
           "package_name": "com.android.application"

@@ -53,14 +53,26 @@ class DailyAttendanceScreenState extends State<DailyAttendanceScreen> {
 
   // Attendance güncelle ve dersi listeden kaldır
   void handleAttendance(Lesson lesson, bool attended) async {
-    lesson.isProcessed = 1; // Ders işlem gördü
+    lesson.isProcessed = 1;
+    int hourCount = 1;
+
     if (!attended) {
-      lesson.attendance = (lesson.attendance) + 1;
+      // Saat sayısını belirle
+      hourCount = 1;
+      if (lesson.hour2 != null && lesson.hour2!.isNotEmpty) hourCount++;
+      if (lesson.hour3 != null && lesson.hour3!.isNotEmpty) hourCount++;
+
+      await dbHelper.incrementAttendanceByCount(lesson.name!, hourCount);
+
+      int updatedAttendance =
+          await dbHelper.getAttendanceByLessonName(lesson.name!);
+      lesson.attendance = updatedAttendance;
     }
-    await dbHelper.update(lesson); // Veritabanında güncelle
+
+    await dbHelper.update(lesson);
 
     setState(() {
-      dailyLessons.remove(lesson); // Listeden kaldır
+      dailyLessons.remove(lesson);
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -68,7 +80,7 @@ class DailyAttendanceScreenState extends State<DailyAttendanceScreen> {
         content: Text(
           attended
               ? "✅ ${lesson.name} dersine katıldınız."
-              : "❌ ${lesson.name} dersine katılmadınız. Devamsızlık +1",
+              : "❌ ${lesson.name} dersine katılmadınız. Devamsızlık +$hourCount",
         ),
       ),
     );

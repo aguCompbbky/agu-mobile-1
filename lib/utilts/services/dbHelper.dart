@@ -7,6 +7,38 @@ import 'package:sqflite/sqflite.dart';
 class Dbhelper {
   Database? _db;
 
+  Future<void> incrementAttendanceByCount(String name, int count) async {
+    Database db = await this.db;
+    String lowerName = name.trim().toLowerCase();
+    await db.rawUpdate(
+      'UPDATE lessons SET attendance = attendance + ? WHERE LOWER(TRIM(name)) = ?',
+      [count, lowerName],
+    );
+  }
+
+  Future<int> getAttendanceByLessonName(String name) async {
+    Database db = await this.db;
+    String lowerName = name.trim().toLowerCase();
+    var result = await db.rawQuery(
+      'SELECT attendance FROM lessons WHERE LOWER(TRIM(name)) = ? LIMIT 1',
+      [lowerName],
+    );
+    if (result.isNotEmpty) {
+      return result.first['attendance'] as int;
+    } else {
+      return 0;
+    }
+  }
+
+  Future<void> incrementAttendanceForLessonNameLowercase(String name) async {
+    Database db = await this.db;
+    String lowerName = name.trim().toLowerCase(); // ← güncel hali
+    await db.rawUpdate(
+      'UPDATE lessons SET attendance = attendance + 1 WHERE LOWER(TRIM(name)) = ?',
+      [lowerName],
+    );
+  }
+
   Future<Database> get db async {
     _db ??= await initializeDb();
 

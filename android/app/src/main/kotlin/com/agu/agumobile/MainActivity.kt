@@ -1,4 +1,4 @@
-package com.example.home_page
+package com.agu.agumobile
 
 import io.flutter.embedding.android.FlutterActivity
 
