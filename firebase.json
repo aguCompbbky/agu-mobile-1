@@ -1,0 +1,41 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "agumobile-27c53",
+          "appId": "1:1065657635325:android:19adaa02844c9279344994",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "agumobile-27c53",
+          "configurations": {
+            "android": "1:1065657635325:android:19adaa02844c9279344994",
+            "ios": "1:1065657635325:ios:7a94fc246a5d89e4344994",
+            "macos": "1:1065657635325:ios:7a94fc246a5d89e4344994",
+            "web": "1:1065657635325:web:3945c40ecc299623344994",
+            "windows": "1:1065657635325:web:27104377c16b9aa2344994"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

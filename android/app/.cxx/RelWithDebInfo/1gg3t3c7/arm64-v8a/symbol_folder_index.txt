@@ -1,0 +1,1 @@
+C:\projects\home_page\build\app\intermediates\cxx\RelWithDebInfo\1gg3t3c7\obj\arm64-v8a
