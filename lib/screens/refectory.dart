@@ -302,8 +302,10 @@ class _RefectoryScreenState extends State<RefectoryScreen> {
                       const SizedBox(height: 10),
                       _buildMealCard(
                         icon: Icons.local_dining,
-                        imageUrl: Image.network(
-                            'https://www.diyetkolik.com/site_media/media/foodrecipe_images/besamelsoslubrokoli.jpg'),
+                        imageUrl: meal.mealImageUrl != null
+                            ? Image.network(meal.vegetarianImageUrl!)
+                            : Image.network(
+                                'https://www.diyetkolik.com/site_media/media/foodrecipe_images/besamelsoslubrokoli.jpg'),
                         title: meal.mainMealVegetarian,
                         mealType: '3_mainMealVegetarian',
                         mealId: '3_mainMealVegetarian',

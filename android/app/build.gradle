@@ -39,8 +39,8 @@ android {
         // Minimum SDK sürümünü ayarlayın
         minSdk 23
         targetSdk = 35 // Flutter'ın otomatik ayarını geçersiz kılar ve SDK 35'i kullanır.
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionCode 2
+        versionName "1.0.1"
     }
 
     signingConfigs {
