@@ -40,7 +40,7 @@ android {
         minSdk 23
         targetSdk = 35 // Flutter'ın otomatik ayarını geçersiz kılar ve SDK 35'i kullanır.
         versionCode 2
-        versionName "1.0.1"
+        versionName "1.0.2" //her güncellemeden sonra bu değeri değiştir, yoksa appbundle ı sisteme sürüklerken hata alırsın.
     }
 
     signingConfigs {

@@ -938,7 +938,7 @@ class GelistiricilerScreen extends StatelessWidget {
       "name": "Yunus Başkan",
       "bio":
           "Bilgisayar Mühendisliği 2. sınıf öğrencisiyim ve yapay zeka, veri bilimi ve blockchain teknolojilerine ilgi duyuyorum. Bu alanlarda kendimi geliştirmek için araştırmalar yapıyor, projeler üretiyor ve yeni teknolojileri yakından takip ediyorum.",
-      "image": "assets/images/gelistiriciler/yunus_baskan.jpg"
+      "image": "assets/images/gelistiriciler/yunus_baskan2.jpg"
     },
     {
       "name": "Turgut Alp Yeşil",
