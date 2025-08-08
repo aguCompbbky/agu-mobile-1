@@ -7,14 +7,17 @@ import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/LessonsFromFirebase.dart';
 import 'package:home_page/auth.dart';
 import 'package:home_page/buttons/buttons.dart';
-import 'package:home_page/eventsCard.dart';
 import 'package:home_page/news.dart';
 import 'package:home_page/profileMenuWidget.dart';
 import 'package:home_page/screens/TimeTableDetail.dart';
 import 'package:home_page/screens/add_class_screen.dart';
 import 'package:home_page/screens/attendance.dart';
 import 'package:home_page/bottom.dart';
+import 'package:home_page/screens/events/eventsCard.dart';
 import 'package:home_page/screens/refectory.dart';
+import 'package:home_page/screens/sisLessonsScreen.dart';
+import 'package:home_page/utilts/constants/constants.dart';
+import 'package:home_page/utilts/models/sisLessons.dart';
 import 'package:home_page/utilts/services/apiService.dart';
 import 'package:home_page/utilts/services/dbHelper.dart';
 import 'package:home_page/utilts/models/lesson.dart';
@@ -85,8 +88,8 @@ void main() async {
       '/login': (context) => MyApp(
             notificationService: NotificationService(),
           ),
-      '/AddClass': (context) =>
-          AddClassScreen(), // Ders ekleme sayfasını buraya ekliyoruz// Ana ekran (MyHomePage)
+      // '/AddClass': (context) =>
+      //     AddClassScreen(), // Ders ekleme sayfasını buraya ekliyoruz// Ana ekran (MyHomePage)
     }, // Ana ekran
   ));
 }
@@ -113,7 +116,24 @@ class _MyAppState extends State<MyApp> {
   String Name = '';
   bool isLoading = true;
 
+  // late List<sisLessons> _sisLessonsList = [];
+
   Map<String, dynamic>? userData;
+
+  // Future<void> _loadDataFromSisAPI() async {
+  //   try {
+  //     List<sisLessons> lessons = await sisLessonsAPI().fetchSisLessonsData();
+
+  //     setState(() {
+  //       _sisLessonsList = lessons;
+  //     });
+
+  //     printColored("Sis bilgileri getirildi", "32");
+  //   } catch (e) {
+  //     // Hata durumunda gerekli işlemleri yapabilirsiniz
+  //     print("Error loading data: $e");
+  //   }
+  // }
 
   Future<void> _loadProfileImage() async {
     try {
@@ -182,10 +202,15 @@ class _MyAppState extends State<MyApp> {
 
     _loadProfileImage();
     loadUserData();
+    // _loadDataFromSisAPI();
   }
 
   @override
   Widget build(BuildContext context) {
+    //aşağıdaki değişkenleri sizedbox larda her cihaza uygun olması için kullanacağız.
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -261,25 +286,16 @@ class _MyAppState extends State<MyApp> {
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            Expanded(
-              child: TimeTable_Card(),
-              //child: UpcomingLessonWidget(),
-            ),
-            //const SizedBox(height: 50),
+            Expanded(child: TimeTable_Card()),
             RefectoryCard(fetchMeals: mealApi.fetchMeals),
-            const SizedBox(
-              height: 10,
+            SizedBox(
+              height: screenHeight * 0.025,
             ),
-            Expanded(
-              child: EventsCard(),
+            EventsCard(),
+            SizedBox(
+              height: screenHeight * 0.025,
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: Buttons(),
-            )
+            Buttons()
           ],
         ),
       ),
@@ -287,44 +303,82 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // ignore: non_constant_identifier_names
   Widget TimeTable_Card() {
-    if (lessons == null || lessons!.isEmpty) {
-      return ListView(
-        children: [
-          Container(
-            // decoration: const BoxDecoration(
-            //     gradient: LinearGradient(colors: [
-            //   Color.fromARGB(255, 255, 255, 255),
-            //   Color.fromARGB(255, 39, 113, 148),
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
-            //   //Colors.white,
-            // ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-            child: Card(
-              color: Colors.transparent,
-              elevation: 0,
-              child: ListTile(
-                title: const Text("Ders Kaydı Bulunamadı"),
-                subtitle:
-                    const Text("Ders Programınızı Eklemek İçin Tıklayınız"),
-                onTap: () {
-                  goToLessonAdd();
-                },
-              ),
+    if (lessons == null || lessons!.isEmpty) {
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: screenHeight * 0.02,
+          horizontal: screenWidth * 0.02,
+        ),
+        child: Card(
+          elevation: 6,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: InkWell(
+            onTap: () {
+              goToLessonAdd();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Başlık
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.grey.shade400, Colors.grey.shade600],
+                    ),
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  padding: EdgeInsets.all(screenWidth * 0.02),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.menu_book_rounded,
+                        color: Colors.white,
+                        size: screenWidth * 0.057,
+                      ),
+                      SizedBox(width: screenWidth * 0.02),
+                      Text(
+                        "Ders Kaydı Bulunamadı",
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenWidth * 0.045,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.all(screenWidth * 0.04),
+                    child: Text(
+                      "Ders eklemek için dokunun",
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.035,
+                        color: Colors.black54,
+                      ),
+                    )),
+                SizedBox(height: screenWidth * 0.02),
+              ],
             ),
           ),
+        ),
+      );
+    } else {
+      // Sıradaki dersi bul
+      Lesson? nextLesson = findUpcomingLesson(lessons!);
+      printColored("dersler: ${nextLesson.toString()}", "32");
+      return ListView(
+        children: [
+          ShowUpcomingLesson(lesson: nextLesson),
         ],
       );
     }
-
-    // Sıradaki dersi bul
-    Lesson? nextLesson = findUpcomingLesson(lessons!);
-
-    return ListView(
-      children: [
-        ShowUpcomingLesson(lesson: nextLesson),
-      ],
-    );
   }
 
   void goToDetail(Lesson lesson) async {
@@ -356,7 +410,9 @@ class _MyAppState extends State<MyApp> {
 
     if (index == 0) {
       await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Timetabledetail()));
+          // context, MaterialPageRoute(builder: (context) => sisLessonsPage()));
+          context,
+          MaterialPageRoute(builder: (context) => Timetabledetail()));
     } else if (index == 3) {
       methods.navigateToPage(context, RefectoryScreen());
     } else if (index == 4) {

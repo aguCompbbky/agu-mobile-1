@@ -40,6 +40,7 @@ dependencies:
   firebase_core: ^3.12.1
   sqflite_common_ffi: ^2.3.5
   timezone: ^0.10.0
+  multi_select_flutter: ^4.1.3
 
 
 
@@ -73,6 +74,13 @@ flutter:
     - assets/images/calendars/4.png
     - assets/images/calendars/schedule2.png
     - assets/images/calendars/schedule1.png
+    - assets/images/calendars/tabela1.png
+    - assets/images/calendars/tabela2.png
+    - assets/images/calendars/tabela3.png
+    - assets/images/calendars/tabela4.png
+    - assets/images/calendars/tabela5.png
+    - assets/images/calendars/tabela6.png
+
 
     
 

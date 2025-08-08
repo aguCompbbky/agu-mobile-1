@@ -66,10 +66,7 @@ class _LessonDetailState extends State<LessonDetail> {
           SizedBox(
             height: 15,
           ),
-          buildInfoCard(
-            "Birinci Ders Saati",
-            buildHour1Field(),
-          ),
+          buildInfoCard("Birinci Ders Saati", buildHour1Field()),
           buildInfoCard("İkinci Ders Saati", buildHour2Field()),
           buildInfoCard("Üçüncü Ders Saati", buildHour3Field()),
           SizedBox(

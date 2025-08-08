@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_page/Feedbacks.dart';
 import 'package:home_page/screens/attendance2.dart';
+import 'package:home_page/screens/sisLessonsScreen.dart';
 // import 'package:home_page/firebase_options.dart';
 import 'package:home_page/utilts/models/academic.dart';
 import 'package:home_page/utilts/services/apiService.dart';
@@ -39,33 +40,33 @@ class MenuPage extends StatelessWidget {
     MenuItem(
         title: "Bildirim Tercihleri",
         icon: Icons.notifications,
-        iconColor: Colors.white,
+        iconColor: Colors.orange,
         page: NotificationScreen()),
     MenuItem(
         title: "Şifreler ve Giriş",
         icon: Icons.key,
-        iconColor: Colors.white,
+        iconColor: Colors.grey,
         page: PasswordScreen()),
     MenuItem(
         title: "Akademik Takvim",
         icon: Icons.calendar_month,
-        iconColor: Colors.white,
+        iconColor: Colors.indigo,
         page: AcademicCalendarScreen()),
     MenuItem(
         title: "Geri Bildirim Gönder",
         icon: Icons.feedback,
-        iconColor: Colors.white,
+        iconColor: Colors.red,
         page: FeedbackScreen()),
     MenuItem(
         title: "Geliştiriciler",
         icon: Icons.people,
-        iconColor: Colors.white,
+        iconColor: Colors.black,
         page: GelistiricilerScreen()),
-    // MenuItem(
-    //     title: "devamsızlık",
-    //     icon: Icons.people,
-    //     iconColor: Colors.white,
-    //     page: AttendancePage()),
+    MenuItem(
+        title: "Sis ders tablosu",
+        icon: Icons.people,
+        iconColor: Colors.white,
+        page: sisLessonsPage()),
   ];
 
   MenuPage({super.key});
@@ -86,7 +87,8 @@ class MenuPage extends StatelessWidget {
                 leading: Icon(
                   menuItem.icon,
                   size: screenWidth * 0.07,
-                  color: Colors.indigo,
+                  color: menuItem.iconColor,
+                  // color: Colors.indigo,
                 ),
                 title: Text(menuItem.title,
                     style: TextStyle(fontSize: screenWidth * 0.045)),
@@ -499,28 +501,6 @@ class _PasswordScreenState extends State<PasswordScreen> {
   }
 }
 
-class AboutAGUScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("AGÜ Hakkında"),
-      ),
-    );
-  }
-}
-
-class AboutDepartmentScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("AGÜ Hakkında"),
-      ),
-    );
-  }
-}
-
 class NotificationScreen extends StatefulWidget {
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -910,40 +890,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 }
 
-class GANOScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("AGÜ Hakkında"),
-      ),
-    );
-  }
-}
-
 class GelistiricilerScreen extends StatelessWidget {
   final List<Map<String, String>> developers = [
     {
       "name": "Mustafa Biçer",
-      "bio": "Bilgisayar Mühendisliği 2. sınıf öğrencisi",
+      "bio": "Bilgisayar Mühendisliği 3. sınıf öğrencisi",
       "image": "assets/images/gelistiriciler/mustafa_bicer.jpg"
     },
     {
       "name": "Mustafa Uğur Karaköse",
       "bio":
-          "Merhaba, ben AGÜ'de Bilgisayar Mühendisi 2. sınıf öğrencisiyim. Yapay zeka ve oyun geliştirme üzerine çalışıyorum. Unity ve TensorFlow kullanıyorum. Ek olarak kendimi siber güvenlik konularında geliştirmeye çalışıyorum.",
+          "Merhaba, ben AGÜ'de Bilgisayar Mühendisi 3. sınıf öğrencisiyim. Yapay zeka ve oyun geliştirme üzerine çalışıyorum. Unity ve TensorFlow kullanıyorum. Ek olarak kendimi siber güvenlik konularında geliştirmeye çalışıyorum.",
       "image": "assets/images/gelistiriciler/karakose.jpg"
     },
     {
       "name": "Yunus Başkan",
       "bio":
-          "Bilgisayar Mühendisliği 2. sınıf öğrencisiyim ve yapay zeka, veri bilimi ve blockchain teknolojilerine ilgi duyuyorum. Bu alanlarda kendimi geliştirmek için araştırmalar yapıyor, projeler üretiyor ve yeni teknolojileri yakından takip ediyorum.",
+          "Bilgisayar Mühendisliği 3. sınıf öğrencisiyim ve yapay zeka, veri bilimi ve blockchain teknolojilerine ilgi duyuyorum. Bu alanlarda kendimi geliştirmek için araştırmalar yapıyor, projeler üretiyor ve yeni teknolojileri yakından takip ediyorum.",
       "image": "assets/images/gelistiriciler/yunus_baskan2.jpg"
     },
     {
       "name": "Turgut Alp Yeşil",
       "bio":
-          "Bilgisayar Mühendisliği 2. sınıf öğrencisi olarak, yazılım geliştirme, veri yapıları ve problem çözme becerilerimi projelerle güçlendiriyorum. Gelecekte yazılım mühendisliği, yapay zeka, veri bilimi veya siber güvenlik alanlarında başarılı olmayı hedefliyorum.",
+          "Bilgisayar Mühendisliği 3. sınıf öğrencisi olarak, yazılım geliştirme, veri yapıları ve problem çözme becerilerimi projelerle güçlendiriyorum. Gelecekte yazılım mühendisliği, yapay zeka, veri bilimi veya siber güvenlik alanlarında başarılı olmayı hedefliyorum.",
       "image": "assets/images/gelistiriciler/turgut_alp.jpg"
     }
   ];
@@ -981,7 +950,7 @@ class GelistiricilerScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: 0.85,
+                  childAspectRatio: 0.75,
                 ),
                 itemCount: developers.length,
                 itemBuilder: (context, index) {
