@@ -23,7 +23,7 @@ class GeziPage extends StatelessWidget {
             height: screenHeight,
             color: Colors.amber,
             child: Text(
-                "Etkinlik adı: ${trip.etkinlik_adi} \nSaat: ${trip.saat1} \nKonum: ${trip.konum1} \nAçıklama: ${trip.aciklama1}"),
+                "Etkinlik adı: ${trip.etkinlik_adi} \nSaat: ${trip.saat1} \nKonum: ${trip.konum1} \nAçıklama: ${trip.aciklama1} \netkinlik adı:  ${trip.etkinlik_adi}"),
           ),
         ));
   }

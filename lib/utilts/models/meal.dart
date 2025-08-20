@@ -32,13 +32,34 @@ class Meal {
     date = json["date"];
     day = json["day"];
     soup = json["soup"];
-    if (json["meal"] != null) {
-      // 'meal' stringini '-' karakterine göre ayır
-      final meal = json["meal"].split("-");
-      mainMeal = meal.isNotEmpty ? meal[0].trim() : null; // İlk kısım
-      mainMealVegetarian =
-          meal.length > 1 ? meal[1].trim() : null; // İkinci kısım
+
+    // 1) Cache’ten gelirse ayrı ayrı olabilir
+    final main1 = json["mainMeal"]?.toString();
+    final veg1 = json["mainMealVegetarian"]?.toString();
+
+    // 2) Sunucudan gelirse tek string olabilir
+    final combined = json["meal"]?.toString();
+    if (combined != null && combined.trim().isNotEmpty) {
+      final parts = combined.split('-');
+      final ana = parts.isNotEmpty ? parts[0].trim() : null;
+      final veg = parts.length > 1 ? parts[1].trim() : null;
+
+      // Öncelik: ayrı alan verilmişse onu kullan, yoksa combined’den geleni
+      mainMeal = main1 ?? ana;
+      mainMealVegetarian = veg1 ?? veg;
+    } else {
+      mainMeal = main1;
+      mainMealVegetarian = veg1;
     }
+
+    // if (json["meal"] != null) {
+    //   // 'meal' stringini '-' karakterine göre ayır
+    //   final meal = json["meal"].split("-");
+    //   mainMeal = meal.isNotEmpty ? meal[0].trim() : null; // İlk kısım
+    //   mainMealVegetarian =
+    //       meal.length > 1 ? meal[1].trim() : null; // İkinci kısım
+    // }
+
     helperMeal = json["helperMeal"];
     dessert = json["dessert"];
 
@@ -59,6 +80,7 @@ class Meal {
   Map toJson() {
     return {
       "date": date,
+      "day": day,
       "soup": soup,
       "mainMeal": mainMeal,
       "mainMealVegetarian": mainMealVegetarian,

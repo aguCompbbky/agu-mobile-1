@@ -1,13 +1,8 @@
 import 'dart:io';
-
-// import 'package:file_picker/file_picker.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_page/Feedbacks.dart';
-import 'package:home_page/screens/attendance2.dart';
-import 'package:home_page/screens/sisLessonsScreen.dart';
-// import 'package:home_page/firebase_options.dart';
+import 'package:home_page/screens/sisAddLessonsPage.dart';
+import 'package:home_page/screens/sisWeeklyProgram.dart';
 import 'package:home_page/utilts/models/academic.dart';
 import 'package:home_page/utilts/services/apiService.dart';
 import 'package:home_page/utilts/services/dbHelper.dart';
@@ -63,10 +58,20 @@ class MenuPage extends StatelessWidget {
         iconColor: Colors.black,
         page: GelistiricilerScreen()),
     MenuItem(
-        title: "Sis ders tablosu",
+        title: "Sis ders ekleme sayfası",
         icon: Icons.people,
         iconColor: Colors.white,
-        page: sisLessonsPage()),
+        page: sisAddLessonsPage()),
+    MenuItem(
+        title: "Sis ders programı",
+        icon: Icons.people,
+        iconColor: Colors.white,
+        page: sisWeeklyProgram()),
+    // MenuItem(
+    //     title: "yemekhane page i 2",
+    //     icon: Icons.people,
+    //     iconColor: Colors.white,
+    //     page: RefectoryScreen2()),
   ];
 
   MenuPage({super.key});

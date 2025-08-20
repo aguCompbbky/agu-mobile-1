@@ -1,7 +1,11 @@
 //EKRANA UYGUN SIZE ALMAK İÇİN GLOBAL SABİT DEĞİŞKENLER
 
-double screenWidth = 0;
-double screenHeight = 0;
+// double screenWidth = 0;
+// double screenHeight = 0;
+
+import 'package:home_page/utilts/models/events.dart';
+
+List<Events> _eventList = [];
 
 const String apiRefectory =
     "AKfycbwc8Fyp-QFheX7u4F2KBt1vfE8roUknaMXEx36GQi2yPeTcHhpWooXkJqi6w_6H8ZH06Q";
@@ -17,25 +21,27 @@ const String baseUrlAcademic =
     "https://script.google.com/macros/s/AKfycbweKfflevdTocYBpFz9A82nRLUKj4_54qi6SeglUXIFoNDG1-Z21Ob9n8La1Nbe0f5UsA/exec";
 
 const String apiEvents =
-    "AKfycbyCb_gT-IShTQgMCru44XUxaU9z5xz6f-WUpb3l-COZsk3f-Zzdy0Hscmk3EOxO8ItV";
+    "AKfycbzYKFOXFEse3yKHunZeoJgcLnZ4nSiP1yrMQBkVXbPNNF5Tus4hEV0NpsadhBtiV4cm";
+// "AKfycbx0JQ-nsZV_hDmcc1ZNloz2Fptwq1viiEUqNTb_8wkhsdll1w5rE0CEEpaGojq70d3Q";
 
 const String baseUrlEvents =
-    "https://script.google.com/macros/s/AKfycbyCb_gT-IShTQgMCru44XUxaU9z5xz6f-WUpb3l-COZsk3f-Zzdy0Hscmk3EOxO8ItV/exec";
+    "https://script.google.com/macros/s/AKfycbzYKFOXFEse3yKHunZeoJgcLnZ4nSiP1yrMQBkVXbPNNF5Tus4hEV0NpsadhBtiV4cm/exec";
+// "https://script.google.com/macros/s/AKfycbx0JQ-nsZV_hDmcc1ZNloz2Fptwq1viiEUqNTb_8wkhsdll1w5rE0CEEpaGojq70d3Q/exec";
 
 const String apiSpeakers =
-    "AKfycbzHGwMLGxb69Qzk_TSba6wb8L18MK3CkNVBWq-b-eA0A2bsbliGLHD97qOMIus67wY6";
+    "AKfycbz6t5ipxhC5EkbN-nNwbklC6zPJLhpdDH16D2NbjODHxrr-ZMD4UpCh_p3XMA9MAVSQ";
 
 const String baseUrlSpeakers =
-    "https://script.google.com/macros/s/AKfycbzHGwMLGxb69Qzk_TSba6wb8L18MK3CkNVBWq-b-eA0A2bsbliGLHD97qOMIus67wY6/exec";
+    "https://script.google.com/macros/s/AKfycbz6t5ipxhC5EkbN-nNwbklC6zPJLhpdDH16D2NbjODHxrr-ZMD4UpCh_p3XMA9MAVSQ/exec";
 
 const String apiTrip =
-    "AKfycbzWnqH0C0t9aGKtKa5FOLCDZTyf_qvY1NwQJz1ifEldB_NsxyK4FJvrfecVyKB4mtMv0Q";
+    "AKfycbzNdkx2I7f4HTDIk09cSKwdXbxSrAco2hCCFCpuApvSiZBm2p3KrY6nJAmM_EFZKvxXLQ";
 
 const String baseUrlTrip =
-    "https://script.google.com/macros/s/AKfycbzWnqH0C0t9aGKtKa5FOLCDZTyf_qvY1NwQJz1ifEldB_NsxyK4FJvrfecVyKB4mtMv0Q/exec";
+    "https://script.google.com/macros/s/AKfycbzNdkx2I7f4HTDIk09cSKwdXbxSrAco2hCCFCpuApvSiZBm2p3KrY6nJAmM_EFZKvxXLQ/exec";
 
 const String apiSisLessons =
-    "AKfycbxS2aYmYD6v-9YkJ2-BNtryORu9Juu5eCDAKyUacRdXFWrbS72DDMe91DiOJv3CV4G0";
+    "AKfycbzG6OxVmgv2a8V3gfPVz0F0lxBgXBbGlRRWmfJQaMjpwb9Av6cr93r_PhoTDZxgHzgo";
 
 const String baseUrlSisLessons =
-    "https://script.google.com/macros/s/AKfycbxS2aYmYD6v-9YkJ2-BNtryORu9Juu5eCDAKyUacRdXFWrbS72DDMe91DiOJv3CV4G0/exec";
+    "https://script.google.com/macros/s/AKfycbzG6OxVmgv2a8V3gfPVz0F0lxBgXBbGlRRWmfJQaMjpwb9Av6cr93r_PhoTDZxgHzgo/exec";

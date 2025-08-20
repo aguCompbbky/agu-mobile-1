@@ -1,23 +1,22 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:home_page/LessonAdd.dart';
-import 'package:home_page/LessonsFromFirebase.dart';
 import 'package:home_page/auth.dart';
 import 'package:home_page/buttons/buttons.dart';
-import 'package:home_page/news.dart';
+import 'package:home_page/data/database_service.dart';
 import 'package:home_page/profileMenuWidget.dart';
 import 'package:home_page/screens/TimeTableDetail.dart';
-import 'package:home_page/screens/add_class_screen.dart';
 import 'package:home_page/screens/attendance.dart';
 import 'package:home_page/bottom.dart';
 import 'package:home_page/screens/events/eventsCard.dart';
 import 'package:home_page/screens/refectory.dart';
-import 'package:home_page/screens/sisLessonsScreen.dart';
 import 'package:home_page/utilts/constants/constants.dart';
-import 'package:home_page/utilts/models/sisLessons.dart';
+import 'package:home_page/utilts/models/Store.dart';
 import 'package:home_page/utilts/services/apiService.dart';
 import 'package:home_page/utilts/services/dbHelper.dart';
 import 'package:home_page/utilts/models/lesson.dart';
@@ -26,7 +25,7 @@ import 'package:home_page/screens/menu.dart';
 import 'package:home_page/methods.dart';
 import 'package:home_page/notifications.dart';
 import 'package:home_page/upcomingLesson.dart';
-import 'package:intl/date_symbol_data_file.dart';
+import 'package:home_page/utilts/services/events_service';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,10 +59,13 @@ void main() async {
 
   tz.initializeTimeZones();
 
+  List<Map<String, dynamic>> _lessonsFromFirebase = [];
+
   final NotificationService notificationService =
       NotificationService(); // Global olarak tanımla
   await notificationService.initNotification();
   await requestPermissions();
+  await DatabaseService.I.debugPrintDbInfo();
 
   Future<void> requestStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
@@ -72,6 +74,16 @@ void main() async {
       print("Depolama izni reddedildi.");
     }
   }
+
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // Tek URL (Apps Script web app): tüm veriyi döndürür.
+  EventsStore.instance.setup(baseUrl: baseUrlEvents);
+
+  // AÇILIŞTA: hızlı + güncel (hibrit)
+  await EventsStore.instance.load(force: false); // cache + meta kontrol
 
   // Uygulamanın tam ekran modunda çalışması
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -92,6 +104,12 @@ void main() async {
       //     AddClassScreen(), // Ders ekleme sayfasını buraya ekliyoruz// Ana ekran (MyHomePage)
     }, // Ana ekran
   ));
+
+  // İlk frame’den sonra arka planda tekrar meta kontrol (UI'ı bekletmeden)
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    // force:false → meta farklıysa full fetch yapar, listeleri günceller
+    EventsStore.instance.load(force: false);
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -115,25 +133,13 @@ class _MyAppState extends State<MyApp> {
   String? imageUrl;
   String Name = '';
   bool isLoading = true;
+  bool isDataFetched = false;
+
+  final eventsService = EventsService(baseUrlEvents);
 
   // late List<sisLessons> _sisLessonsList = [];
 
   Map<String, dynamic>? userData;
-
-  // Future<void> _loadDataFromSisAPI() async {
-  //   try {
-  //     List<sisLessons> lessons = await sisLessonsAPI().fetchSisLessonsData();
-
-  //     setState(() {
-  //       _sisLessonsList = lessons;
-  //     });
-
-  //     printColored("Sis bilgileri getirildi", "32");
-  //   } catch (e) {
-  //     // Hata durumunda gerekli işlemleri yapabilirsiniz
-  //     print("Error loading data: $e");
-  //   }
-  // }
 
   Future<void> _loadProfileImage() async {
     try {
@@ -185,6 +191,17 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  void getAllDatas() {
+    if (isDataFetched != true) {
+      lessons = []; // Başlangıçta boş liste
+      getLessons(); // Dersleri yükle
+      getDailyLesson();
+      _loadProfileImage();
+      loadUserData();
+      isDataFetched = true;
+    }
+  }
+
   @override
   void initState() {
     final istanbul = tz.getLocation('Europe/Istanbul');
@@ -199,9 +216,11 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(Duration.zero, () async {
       await requestNotificationPermission(context);
     });
+    getUserData();
+    getAllDatas();
 
-    _loadProfileImage();
-    loadUserData();
+    // _loadProfileImage();
+    // loadUserData();
     // _loadDataFromSisAPI();
   }
 
@@ -285,9 +304,10 @@ class _MyAppState extends State<MyApp> {
           Color.fromARGB(255, 255, 255, 255),
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(child: TimeTable_Card()),
-            RefectoryCard(fetchMeals: mealApi.fetchMeals),
+            RefectoryCard(),
             SizedBox(
               height: screenHeight * 0.025,
             ),
@@ -327,6 +347,7 @@ class _MyAppState extends State<MyApp> {
               children: [
                 // Başlık
                 Container(
+                  height: screenHeight * 0.055,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Colors.grey.shade400, Colors.grey.shade600],
@@ -552,6 +573,7 @@ Future<Map<String, dynamic>?> getUserData() async {
         'image_url': userData['image_url'] ?? '',
         'student_id': userData['student_id'] ?? '',
         'username': userData['username'] ?? '',
+        // 'lessonsList': userData[DateTime.now().year.toString()][term] ?? '',
       };
     }
   } catch (e) {

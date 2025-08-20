@@ -2,21 +2,23 @@ class sisLessons {
   // late List<sisLessons> _sisLessonsList = [];
 
   String? gun;
+  int? dow;
   String? saat;
   String? ders_kodu;
-  late String ders_adi;
+  late String? ders_adi;
   String? derslik;
   String? ogretim_elemani;
 
-  sisLessons(
+  sisLessons({
     // this._sisLessonsList,
     this.gun,
+    this.dow,
     this.saat,
     this.ders_kodu,
     this.ders_adi,
     this.derslik,
     this.ogretim_elemani,
-  );
+  });
 
   sisLessons.empty();
 

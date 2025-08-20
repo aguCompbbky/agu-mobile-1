@@ -6,6 +6,7 @@ import 'package:home_page/utilts/models/events.dart';
 import 'package:home_page/utilts/models/meal.dart';
 import 'package:home_page/utilts/models/sisLessons.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MealApi {
   Future<List<Meal>> fetchMeals() async {
@@ -156,41 +157,3 @@ class sisLessonsAPI {
     }
   }
 }
-
-
-// class sisLessonsAPI {
-//   Future<List<sisLessons>> fetchSisLessonsData() async {
-//     final url = Uri.parse(baseUrlSisLessons);
-
-//     try {
-//       final response = await http.get(url);
-//       // print(
-//       //   "Full API Response For Lessons: ${response.body}",
-//       // );
-//       print("Veri uzunluğu: ${response.body.length}");
-
-//       if (response.statusCode == 200) {
-//         final Map<String, dynamic> data = json.decode(response.body);
-
-//         final List<dynamic> compData = data['compData'];
-//         print("Toplam veri sayısı: ${compData.length}");
-
-//         final List<dynamic> ieData = data['ieData'];
-//         print("Toplam veri sayısı: ${compData.length}");
-
-        
-
-//         return compData.map((item) => sisLessons.fromJson(item)).toList();
-
-        
-
-//         // final List<dynamic> data = json.decode(response.body);
-//         // return data.map((item) => sisLessons.fromJson(item)).toList();
-//       } else {
-//         throw Exception("Failed to load events data");
-//       }
-//     } catch (e) {
-//       throw Exception("Error $e");
-//     }
-//   }
-// }

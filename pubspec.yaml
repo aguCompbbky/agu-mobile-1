@@ -41,6 +41,8 @@ dependencies:
   sqflite_common_ffi: ^2.3.5
   timezone: ^0.10.0
   multi_select_flutter: ^4.1.3
+  path_provider: ^2.1.5
+  dropdown_button2: ^2.3.9
 
 
 
@@ -58,6 +60,7 @@ flutter:
 
   # Varlık dosyalarını tanımlamak için bu kısmı kullanabilirsiniz.
   assets:
+    - assets/db/lessons.db
     - assets/images/agu-logo.png
     - assets/images/Canvas_logo_single_mark.png
     - assets/images/images.png
