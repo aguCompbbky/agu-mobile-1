@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:home_page/bottom.dart';
-import 'package:home_page/main.dart';
-import 'package:home_page/news.dart';
 import 'package:home_page/notifications.dart';
-import 'package:home_page/screens/TimeTableDetail.dart' show Timetabledetail;
-
-// import 'package:home_page/screens/TimeTableDetail.dart';
-import 'package:home_page/screens/refectory.dart';
-
 import 'package:home_page/utilts/services/dbHelper.dart';
 import 'package:home_page/utilts/models/lesson.dart';
-
 import 'package:sqflite/sqflite.dart';
 
 class DailyAttendanceScreen extends StatefulWidget {
@@ -60,7 +52,6 @@ class DailyAttendanceScreenState extends State<DailyAttendanceScreen> {
       // Saat sayısını belirle
       hourCount = 1;
       if (lesson.hour2 != null && lesson.hour2!.isNotEmpty) hourCount++;
-      if (lesson.hour3 != null && lesson.hour3!.isNotEmpty) hourCount++;
 
       await dbHelper.incrementAttendanceByCount(lesson.name!, hourCount);
 
@@ -110,10 +101,9 @@ class DailyAttendanceScreenState extends State<DailyAttendanceScreen> {
         child: dailyLessons.isEmpty
             ? Center(
                 child: Text(
-                  "Bugün (${currentDay}) için ders bulunamadı.",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: const Color.fromARGB(255, 255, 255, 255)),
+                  "Bugün ($currentDay) için ders bulunamadı.",
+                  style: const TextStyle(
+                      fontSize: 18, color: Color.fromARGB(255, 255, 255, 255)),
                 ),
               )
             : ListView.builder(
@@ -176,13 +166,23 @@ class DailyAttendanceScreenState extends State<DailyAttendanceScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              "Saatler: ${lesson.hour1 ?? ""} / ${lesson.hour2 ?? ""} / ${lesson.hour3 ?? ""}",
+              "Saatler: ${lesson.hour1 ?? ""} / ${lesson.hour2 ?? ""}",
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.black54,
               ),
             ),
             const SizedBox(height: 4),
+            Text(
+              "Öğretmen: ${lesson.teacher ?? "Öğretmen bilgisi yok"}",
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black54,
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
             Text(
               "Sınıf: ${lesson.place ?? "Sınıf bilgisi yok"}",
               style: const TextStyle(

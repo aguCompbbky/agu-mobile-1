@@ -15,10 +15,10 @@ class _LessonDetailState extends State<LessonDetail> {
   var dbHelper = Dbhelper();
   TextEditingController txtName = TextEditingController();
   TextEditingController txtClass = TextEditingController();
+  TextEditingController txtTeacher = TextEditingController();
   String? selectedDay;
   String? selectedHour1;
   String? selectedHour2;
-  String? selectedHour3;
 
   @override
   void initState() {
@@ -29,19 +29,19 @@ class _LessonDetailState extends State<LessonDetail> {
     selectedDay = widget.lesson.day;
     selectedHour1 = widget.lesson.hour1;
     selectedHour2 = widget.lesson.hour2;
-    selectedHour3 = widget.lesson.hour3;
+    txtTeacher.text = widget.lesson.teacher ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ders Detayı"),
+        title: const Text("Ders Detayı"),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: deleteLesson,
-            icon: Icon(
+            icon: const Icon(
               Icons.delete,
               color: Colors.red,
             ),
@@ -53,23 +53,27 @@ class _LessonDetailState extends State<LessonDetail> {
         padding: EdgeInsets.all(20),
         children: [
           buildSectionTitle("Ders Bilgileri"),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           buildInfoCard("Ders Adı", buildNameField()),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           buildInfoCard("Sınıf", buildClassField()),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
+          buildSectionTitle("Öğretmen Bilgileri"),
+          const SizedBox(
+            height: 10,
+          ),
+          buildInfoCard("Öğretmen Adı", buildTeacherField()),
           buildSectionTitle("Ders Günü"),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           buildInfoCard("Gün Seçimi", buildDayField()),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           buildSectionTitle("Ders Saatleri"),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           buildInfoCard("Birinci Ders Saati", buildHour1Field()),
           buildInfoCard("İkinci Ders Saati", buildHour2Field()),
-          buildInfoCard("Üçüncü Ders Saati", buildHour3Field()),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Row(
@@ -134,6 +138,15 @@ class _LessonDetailState extends State<LessonDetail> {
     );
   }
 
+  buildTeacherField() {
+    return TextField(
+      decoration: InputDecoration(
+          hintText: "Öğretmen",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+      controller: txtTeacher,
+    );
+  }
+
   buildDayField() {
     final List<String> days = [
       "Pazartesi",
@@ -145,7 +158,7 @@ class _LessonDetailState extends State<LessonDetail> {
       "Pazar"
     ];
     return DropdownButtonFormField<String>(
-      value: selectedDay,
+      initialValue: selectedDay,
       decoration: InputDecoration(
           hintText: "Gün Seç",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
@@ -165,23 +178,23 @@ class _LessonDetailState extends State<LessonDetail> {
 
   buildHour1Field() {
     final List<String> hours = [
-      "08.00 - 08.45",
-      "09.00 - 09.45",
-      "10.00 - 10.45",
-      "11.00 - 11.45",
-      "12.00 - 12.45",
-      "13.00 - 13.45",
-      "14.00 - 14.45",
-      "15.00 - 15.45",
-      "16.00 - 16.45",
-      "17.00 - 17.45",
-      "18.00 - 18.45",
-      "19.00 - 19.45",
-      "20.00 - 20.45",
+      "08:00-08:45",
+      "09:00-09:45",
+      "10:00-10:45",
+      "11:00-11:45",
+      "12:00-12:45",
+      "13:00-13:45",
+      "14:00-14:45",
+      "15:00-15:45",
+      "16:00-16:45",
+      "17:00-17:45",
+      "18:00-18:45",
+      "19:00-19:45",
+      "20:00-20:45",
     ];
 
     return DropdownButtonFormField<String>(
-      value: selectedHour1,
+      initialValue: selectedHour1,
       decoration: InputDecoration(
           hintText: "İlk Ders Saati",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
@@ -201,23 +214,23 @@ class _LessonDetailState extends State<LessonDetail> {
 
   buildHour2Field() {
     final List<String> hours = [
-      "08.00 - 08.45",
-      "09.00 - 09.45",
-      "10.00 - 10.45",
-      "11.00 - 11.45",
-      "12.00 - 12.45",
-      "13.00 - 13.45",
-      "14.00 - 14.45",
-      "15.00 - 15.45",
-      "16.00 - 16.45",
-      "17.00 - 17.45",
-      "18.00 - 18.45",
-      "19.00 - 19.45",
+      "08:00-08:45",
+      "09:00-09:45",
+      "10:00-10:45",
+      "11:00-11:45",
+      "12:00-12:45",
+      "13:00-13:45",
+      "14:00-14:45",
+      "15:00-15:45",
+      "16:00-16:45",
+      "17:00-17:45",
+      "18:00-18:45",
+      "19:00-19:45",
     ];
 
     return SingleChildScrollView(
       child: DropdownButtonFormField<String>(
-          value: selectedHour2,
+          initialValue: selectedHour2,
           decoration: InputDecoration(
               hintText: "İkinci Ders Saatinizi Giriniz",
               border:
@@ -231,43 +244,6 @@ class _LessonDetailState extends State<LessonDetail> {
           onChanged: (value) {
             setState(() {
               selectedHour2 = value;
-            });
-          }),
-    );
-  }
-
-  buildHour3Field() {
-    final List<String> hours = [
-      "08.00 - 08.45",
-      "09.00 - 09.45",
-      "10.00 - 10.45",
-      "11.00 - 11.45",
-      "12.00 - 12.45",
-      "13.00 - 13.45",
-      "14.00 - 14.45",
-      "15.00 - 15.45",
-      "16.00 - 16.45",
-      "17.00 - 17.45",
-      "18.00 - 18.45",
-      "19.00 - 19.45"
-    ];
-
-    return SingleChildScrollView(
-      child: DropdownButtonFormField<String>(
-          value: selectedHour3,
-          decoration: InputDecoration(
-              hintText: "Üçüncü Ders Saatinizi Giriniz",
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-          items: hours
-              .map((hour) => DropdownMenuItem(
-                    value: hour,
-                    child: Text(hour),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            setState(() {
-              selectedHour3 = value;
             });
           }),
     );
@@ -317,7 +293,7 @@ class _LessonDetailState extends State<LessonDetail> {
         selectedDay,
         selectedHour1,
         selectedHour2,
-        selectedHour3,
+        txtTeacher.text,
       ),
     );
     Navigator.pop(context, true);

@@ -10,12 +10,12 @@ class LessonAdd extends StatefulWidget {
 class _LessonAdd extends State<LessonAdd> {
   String? selectedHour1;
   String? selectedHour2;
-  String? selectedHour3;
   String? selectedDay;
   var dbHelper = Dbhelper();
 
   TextEditingController txtName = TextEditingController();
   TextEditingController txtClass = TextEditingController();
+  TextEditingController txtTeacher = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,16 @@ class _LessonAdd extends State<LessonAdd> {
             buildClassField(),
             const SizedBox(height: 20),
             const Text(
+              "Öğretmen Bilgileri",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueGrey,
+              ),
+            ),
+            buildTeacherField(),
+            const SizedBox(height: 20),
+            const Text(
               "Ders Günü ve Saatleri",
               style: TextStyle(
                 fontSize: 20,
@@ -57,8 +67,6 @@ class _LessonAdd extends State<LessonAdd> {
             buildHour1Field(),
             const SizedBox(height: 10),
             buildHour2Field(),
-            const SizedBox(height: 10),
-            buildHour3Field(),
             const SizedBox(height: 30),
             buildSaveButton(),
           ],
@@ -90,6 +98,19 @@ class _LessonAdd extends State<LessonAdd> {
         prefixIcon: const Icon(Icons.place),
       ),
       controller: txtClass,
+    );
+  }
+
+  Widget buildTeacherField() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: "Öğretmen Adı",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        prefixIcon: const Icon(Icons.person),
+      ),
+      controller: txtTeacher,
     );
   }
 
@@ -130,18 +151,18 @@ class _LessonAdd extends State<LessonAdd> {
   Widget buildHourField(
       String label, String? selectedHour, void Function(String?) onChanged) {
     final List<String> hours = [
-      "08.00 - 08.45",
-      "09.00 - 09.45",
-      "10.00 - 10.45",
-      "11.00 - 11.45",
-      "12.00 - 12.45",
-      "13.00 - 13.45",
-      "14.00 - 14.45",
-      "15.00 - 15.45",
-      "16.00 - 16.45",
-      "17.00 - 17.45",
-      "18.00 - 18.45",
-      "19.00 - 19.45",
+      "08:00-08:45",
+      "09:00-09:45",
+      "10:00-10:45",
+      "11:00-11:45",
+      "12:00-12:45",
+      "13:00-13:45",
+      "14:00-14:45",
+      "15:00-15:45",
+      "16:00-16:45",
+      "17:00-17:45",
+      "18:00-18:45",
+      "19:00-19:45",
     ];
 
     return DropdownButtonFormField<String>(
@@ -180,15 +201,6 @@ class _LessonAdd extends State<LessonAdd> {
     });
   }
 
-  Widget buildHour3Field() {
-    return buildHourField("Üçüncü Ders Saatinizi Giriniz", selectedHour3,
-        (value) {
-      setState(() {
-        selectedHour3 = value;
-      });
-    });
-  }
-
   Widget buildSaveButton() {
     return SizedBox(
       width: double.infinity,
@@ -219,7 +231,7 @@ class _LessonAdd extends State<LessonAdd> {
 
     await dbHelper.insert(
       Lesson(txtName.text, txtClass.text, selectedDay, selectedHour1,
-          selectedHour2, selectedHour3),
+          selectedHour2, txtTeacher.text),
     );
     Navigator.pop(
         context, true); // Ders başarıyla eklendiğinde önceki sayfaya dön

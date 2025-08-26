@@ -3,6 +3,7 @@ class Academic {
   String? event;
   String? startDate;
   String? endDate;
+  String? term;
 
   Academic.isEmpty();
   Academic(this.category, this.event, this.startDate, this.endDate);
@@ -12,6 +13,7 @@ class Academic {
     event = json["event"];
     startDate = json["startDate"];
     endDate = json["endDate"];
+    term = json["term"];
   }
 
   Map toJson() {
@@ -20,6 +22,7 @@ class Academic {
       "event": event,
       "startDate": startDate,
       "endDate": endDate,
+      "term": term
     };
   }
 }

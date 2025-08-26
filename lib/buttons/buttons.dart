@@ -132,7 +132,7 @@ class _Buttons extends State<Buttons> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 60, bottom: 60, right: 60),
+          padding: const EdgeInsets.only(left: 30, bottom: 60, right: 30),
           child: Row(
             children: [
               Column(
@@ -161,7 +161,36 @@ class _Buttons extends State<Buttons> {
                   ),
                 ],
               ),
-              const SizedBox(width: 50),
+              const SizedBox(
+                width: 30,
+              ),
+              Column(
+                children: [
+                  CustomImageButton(
+                    assetPath: "assets/images/Canvas_logo_single_mark.png",
+                    onTap: () {
+                      handleButtonPress(
+                        title: "Canvas PREP",
+                        url: "https://canvasfl.agu.edu.tr/login/canvas",
+                        mailPrefKey: "prepCanvasMail",
+                        passwordPrefKey: "prepCanvasPassword",
+                        mailFieldName: "pseudonym_session[unique_id]",
+                        passwordFieldName: "pseudonym_session[password]",
+                        loginButtonFieldXPath: "//*[@id='login_form']/button",
+                        keyword: "success",
+                      );
+                    },
+                    backgroundColor: Colors.redAccent,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Text(
+                    "PREP",
+                  ),
+                ],
+              ),
+              const SizedBox(width: 30),
               Column(
                 children: [
                   CustomImageButton(
@@ -187,7 +216,7 @@ class _Buttons extends State<Buttons> {
                   ),
                 ],
               ),
-              const SizedBox(width: 50),
+              const SizedBox(width: 30),
               Column(
                 children: [
                   CustomImageButton(

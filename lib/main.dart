@@ -8,7 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/auth.dart';
 import 'package:home_page/buttons/buttons.dart';
-import 'package:home_page/data/database_service.dart';
 import 'package:home_page/profileMenuWidget.dart';
 import 'package:home_page/screens/TimeTableDetail.dart';
 import 'package:home_page/screens/attendance.dart';
@@ -65,7 +64,6 @@ void main() async {
       NotificationService(); // Global olarak tanımla
   await notificationService.initNotification();
   await requestPermissions();
-  await DatabaseService.I.debugPrintDbInfo();
 
   Future<void> requestStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
@@ -307,6 +305,9 @@ class _MyAppState extends State<MyApp> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(child: TimeTable_Card()),
+            SizedBox(
+              height: screenHeight * 0.025,
+            ),
             RefectoryCard(),
             SizedBox(
               height: screenHeight * 0.025,
