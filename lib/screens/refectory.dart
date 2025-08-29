@@ -1105,7 +1105,9 @@ class MealText extends StatelessWidget {
 }
 
 class RefectoryCard extends StatefulWidget {
-  const RefectoryCard({Key? key}) : super(key: key);
+  const RefectoryCard(
+      {Key? key, required Future<List<Meal>> Function() fetchMeals})
+      : super(key: key);
 
   @override
   State<RefectoryCard> createState() => _RefectoryCardState();

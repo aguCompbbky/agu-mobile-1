@@ -1,0 +1,2 @@
+C:/Users/teknosa/Documents/GitHub/agu-mobile/android/app/.cxx/RelWithDebInfo/5y2r6hm6/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/teknosa/Documents/GitHub/agu-mobile/android/app/.cxx/RelWithDebInfo/5y2r6hm6/armeabi-v7a/CMakeFiles/rebuild_cache.dir

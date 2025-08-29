@@ -3,11 +3,8 @@ import java.io.FileInputStream
 
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
+    id "com.google.gms.google-services"
     id "kotlin-android"
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
 
@@ -16,61 +13,59 @@ def keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-
+def hasKeystore = keystorePropertiesFile.exists() && keystoreProperties['storeFile']
 
 android {
-    namespace = "com.agu.agumobile"
-    compileSdk = 35 // Flutter'ın otomatik ayarını geçersiz kılar ve SDK 35'i kullanır.
-    ndkVersion = flutter.ndkVersion
+    namespace "com.agu.agumobile"
+    compileSdkVersion 35
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = "17"
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.agu.agumobile"
-        // Minimum SDK sürümünü ayarlayın
-        minSdk 23
-        targetSdk = 35 // Flutter'ın otomatik ayarını geçersiz kılar ve SDK 35'i kullanır.
-        versionCode 5     //her güncellemeden sonra bu değeri değiştir, yoksa appbundle ı sisteme sürüklerken hata alırsın.
-        versionName "1.0.4" //her güncellemeden sonra bu değeri değiştir, yoksa appbundle ı sisteme sürüklerken hata alırsın.
+        applicationId "com.agu.agumobile"
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 5
+        versionName "1.0.4"
     }
 
     signingConfigs {
-    release {
-        keyAlias = keystoreProperties['keyAlias']
-        keyPassword = keystoreProperties['keyPassword']
-        storeFile = file(keystoreProperties['storeFile'])
-        storePassword = keystoreProperties['storePassword']
+        if (hasKeystore) {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
     }
-}
-
 
     buildTypes {
-    release {
-        signingConfig = signingConfigs.release
-        minifyEnabled false
-        shrinkResources false
-        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        release {
+            if (hasKeystore) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
+        }
     }
-}
-
 }
 
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }
 
-
 flutter {
+    // Burada '=' olmalı
     source = "../.."
 }
-
-//

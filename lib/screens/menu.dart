@@ -1,8 +1,13 @@
 import 'dart:io';
+
+// import 'package:file_picker/file_picker.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:home_page/Feedbacks.dart';
-import 'package:home_page/screens/sisAddLessonsPage.dart';
-import 'package:home_page/screens/sisWeeklyProgram.dart';
+import 'package:home_page/screens/attendance2.dart';
+//import 'package:home_page/screens/sisLessonsScreen.dart';
+// import 'package:home_page/firebase_options.dart';
 import 'package:home_page/utilts/models/academic.dart';
 import 'package:home_page/utilts/services/apiService.dart';
 import 'package:home_page/utilts/services/dbHelper.dart';
@@ -10,9 +15,9 @@ import 'package:home_page/utilts/models/lesson.dart';
 import 'package:home_page/methods.dart';
 import 'package:intl/intl.dart';
 import 'package:home_page/notifications.dart';
-
+import 'sisAddLessonsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'guide_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 Methods methods = Methods();
@@ -58,20 +63,15 @@ class MenuPage extends StatelessWidget {
         iconColor: Colors.black,
         page: GelistiricilerScreen()),
     MenuItem(
-        title: "Sis ders ekleme sayfası",
+        title: "Sis ders tablosu",
         icon: Icons.people,
         iconColor: Colors.white,
         page: sisAddLessonsPage()),
     MenuItem(
-        title: "Sis ders programı",
-        icon: Icons.people,
-        iconColor: Colors.white,
-        page: sisWeeklyProgram()),
-    // MenuItem(
-    //     title: "yemekhane page i 2",
-    //     icon: Icons.people,
-    //     iconColor: Colors.white,
-    //     page: RefectoryScreen2()),
+        title: "Rehber",
+        icon: Icons.menu_book_outlined,
+        iconColor: Colors.black,
+        page: const GuidePage()),
   ];
 
   MenuPage({super.key});
