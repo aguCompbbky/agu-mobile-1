@@ -65,8 +65,6 @@ void main() async {
       NotificationService(); // Global olarak tanımla
   await notificationService.initNotification();
   await requestPermissions();
-  await DatabaseService.I.debugPrintDbInfo();
-
   Future<void> requestStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
       print("Depolama izni verildi.");
@@ -106,9 +104,17 @@ void main() async {
   ));
 
   // İlk frame’den sonra arka planda tekrar meta kontrol (UI'ı bekletmeden)
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     // force:false → meta farklıysa full fetch yapar, listeleri günceller
     EventsStore.instance.load(force: false);
+    try {
+      await DatabaseService.I.ensureReady(); // varsa oluştur, yoksa aç
+      await DatabaseService.I
+          .debugPrintDbInfo()
+          .timeout(const Duration(seconds: 5));
+    } catch (e, s) {
+      debugPrint('DB info failed: $e\n$s');
+    }
   });
 }
 
