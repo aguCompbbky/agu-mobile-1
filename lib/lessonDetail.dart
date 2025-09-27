@@ -154,7 +154,7 @@ class _LessonDetailState extends State<LessonDetail> {
       "Çarşamba",
       "Perşembe",
       "Cuma",
-      "Cumartesi",
+      "Cumartesi", //aa
       "Pazar"
     ];
     return DropdownButtonFormField<String>(
