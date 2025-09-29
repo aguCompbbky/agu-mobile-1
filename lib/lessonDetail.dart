@@ -158,7 +158,7 @@ class _LessonDetailState extends State<LessonDetail> {
       "Pazar"
     ];
     return DropdownButtonFormField<String>(
-      initialValue: selectedDay,
+      // initialValue: selectedDay,
       decoration: InputDecoration(
           hintText: "Gün Seç",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
@@ -194,7 +194,7 @@ class _LessonDetailState extends State<LessonDetail> {
     ];
 
     return DropdownButtonFormField<String>(
-      initialValue: selectedHour1,
+      // initialValue: selectedHour1,
       decoration: InputDecoration(
           hintText: "İlk Ders Saati",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
@@ -230,7 +230,7 @@ class _LessonDetailState extends State<LessonDetail> {
 
     return SingleChildScrollView(
       child: DropdownButtonFormField<String>(
-          initialValue: selectedHour2,
+          // initialValue: selectedHour2,
           decoration: InputDecoration(
               hintText: "İkinci Ders Saatinizi Giriniz",
               border:

@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:home_page/Feedbacks.dart';
+import 'package:home_page/screens/guide_page.dart';
+import 'package:home_page/screens/sisAddLessonsPage.dart';
 import 'package:home_page/screens/sisWeeklyProgram.dart';
 import 'package:home_page/utilts/models/academic.dart';
 import 'package:home_page/utilts/services/apiService.dart';
@@ -56,17 +58,11 @@ class MenuPage extends StatelessWidget {
         icon: Icons.people,
         iconColor: Colors.black,
         page: GelistiricilerScreen()),
-
     MenuItem(
-        title: "Sis ders programı",
-        icon: Icons.people,
-        iconColor: Colors.white,
-        page: sisWeeklyProgram()),
-    // MenuItem(
-    //     title: "yemekhane page i 2",
-    //     icon: Icons.people,
-    //     iconColor: Colors.white,
-    //     page: RefectoryScreen2()),
+        title: "Rehber",
+        icon: Icons.menu_book_outlined,
+        iconColor: Colors.brown,
+        page: const GuidePage()),
   ];
 
   MenuPage({super.key});

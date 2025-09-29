@@ -123,29 +123,29 @@ class _EventsCardState extends State<EventsCard> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      height: screenHeight * 0.15,
+      height: screenHeight * 0.25,
       width: screenWidth * 0.95,
       // padding: EdgeInsets.all(2.0),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              // gradient: LinearGradient(
-              //     colors: [Colors.white, Colors.amberAccent, Colors.white],
-              //     begin: Alignment.topLeft,
-              //     end: Alignment.bottomRight),
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(2),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20)),
-              border: Border(
-                // top: BorderSide(width: 1.5, color: Colors.black),
-                // left: BorderSide(width: 1.5, color: Colors.black),
-                bottom: BorderSide(width: 6.0, color: Colors.black45),
-                right: BorderSide(width: 6.0, color: Colors.black45),
-              )),
+          // decoration: const BoxDecoration(
+          //     color: Colors.white,
+          //     // gradient: LinearGradient(
+          //     //     colors: [Colors.white, Colors.amberAccent, Colors.white],
+          //     //     begin: Alignment.topLeft,
+          //     //     end: Alignment.bottomRight),
+          //     borderRadius: BorderRadius.only(
+          //         topLeft: Radius.circular(2),
+          //         topRight: Radius.circular(20),
+          //         bottomLeft: Radius.circular(20),
+          //         bottomRight: Radius.circular(20)),
+          //     border: Border(
+          //       // top: BorderSide(width: 1.5, color: Colors.black),
+          //       // left: BorderSide(width: 1.5, color: Colors.black),
+          //       bottom: BorderSide(width: 6.0, color: Colors.black45),
+          //       right: BorderSide(width: 6.0, color: Colors.black45),
+          //     )),
           child: Center(
             child: SizedBox(
               height: screenHeight * 0.23, // Yükseklik ekranın %25'i

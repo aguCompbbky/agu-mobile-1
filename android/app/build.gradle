@@ -37,7 +37,8 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.agu.agumobile"
         // Minimum SDK sürümünü ayarlayın
-        minSdkVersion flutter.minSdkVersion
+        // minSdkVersion flutter.minSdkVersion
+        minSdk 23
         targetSdk = 35 // Flutter'ın otomatik ayarını geçersiz kılar ve SDK 35'i kullanır.
         versionCode 8     //her güncellemeden sonra bu değeri değiştir, yoksa appbundle ı sisteme sürüklerken hata alırsın.
         versionName "1.0.7" //her güncellemeden sonra bu değeri değiştir, yoksa appbundle ı sisteme sürüklerken hata alırsın.
