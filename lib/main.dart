@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/auth.dart';
 import 'package:home_page/buttons/buttons.dart';
+import 'package:home_page/data/database_service.dart';
 import 'package:home_page/profileMenuWidget.dart';
 import 'package:home_page/screens/TimeTableDetail.dart';
 import 'package:home_page/screens/attendance.dart';
@@ -64,7 +65,12 @@ void main() async {
       NotificationService(); // Global olarak tanımla
   await notificationService.initNotification();
   await requestPermissions();
+  // DatabaseService.I.debugPrintDbInfo();
+  // await DatabaseService.I.debugPrintDbInfo();
+// <<<<<<< HEAD
+// =======
 
+// >>>>>>> ca7cdcfda53429e5a192d633fc0325eea072688f
   Future<void> requestStoragePermission() async {
     if (await Permission.storage.request().isGranted) {
       print("Depolama izni verildi.");
@@ -81,7 +87,7 @@ void main() async {
   EventsStore.instance.setup(baseUrl: baseUrlEvents);
 
   // AÇILIŞTA: hızlı + güncel (hibrit)
-  await EventsStore.instance.load(force: false); // cache + meta kontrol
+  // await EventsStore.instance.load(force: false); // cache + meta kontrol
 
   // Uygulamanın tam ekran modunda çalışması
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -104,9 +110,17 @@ void main() async {
   ));
 
   // İlk frame’den sonra arka planda tekrar meta kontrol (UI'ı bekletmeden)
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     // force:false → meta farklıysa full fetch yapar, listeleri günceller
     EventsStore.instance.load(force: false);
+    // try {
+    //   await DatabaseService.I.ensureReady(); // varsa oluştur, yoksa aç
+    //   await DatabaseService.I
+    //       .debugPrintDbInfo()
+    //       .timeout(const Duration(seconds: 5));
+    // } catch (e, s) {
+    //   debugPrint('DB info failed: $e\n$s');
+    // }
   });
 }
 
@@ -301,23 +315,25 @@ class _MyAppState extends State<MyApp> {
           Color.fromARGB(255, 39, 113, 148),
           Color.fromARGB(255, 255, 255, 255),
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(child: TimeTable_Card()),
-            SizedBox(
-              height: screenHeight * 0.025,
-            ),
-            RefectoryCard(),
-            SizedBox(
-              height: screenHeight * 0.025,
-            ),
-            EventsCard(),
-            SizedBox(
-              height: screenHeight * 0.025,
-            ),
-            Buttons()
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: screenHeight * 0.20, child: TimeTable_Card()),
+              // SizedBox(
+              //   height: screenHeight * 0.025,
+              // ),
+              RefectoryCard(),
+              SizedBox(
+                height: screenHeight * 0.025,
+              ),
+              EventsCard(),
+              SizedBox(
+                height: screenHeight * 0.025,
+              ),
+              Buttons()
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: bottomBar2(context, 2), // Alt gezinme çubuğu

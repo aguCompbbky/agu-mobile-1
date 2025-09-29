@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/bottom.dart';
+import 'package:home_page/screens/sisAddLessonsPage.dart';
 
 import 'package:home_page/screens/sisLoginPage.dart';
 
@@ -165,7 +166,15 @@ class _TimetabledetailState extends State<Timetabledetail> {
       items: [
         PopupMenuItem(
           child: ListTile(
-            title: const Text('Manuel Ekle'),
+            title: const Text('Manuel Ekle (Bölüm)'),
+            onTap: () {
+              methods.navigateToPage(context, sisAddLessonsPage());
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: ListTile(
+            title: const Text('Manuel Ekle (Hazırlık)'),
             onTap: () {
               goToLessonAdd();
             },
