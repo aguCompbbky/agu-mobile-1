@@ -262,39 +262,34 @@ class ShowUpcomingLesson extends StatelessWidget {
 
   Widget _buildLessonContentHorizontal(
       BuildContext context, double screenWidth) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Table(
+      columnWidths: const {
+        0: FlexColumnWidth(1),
+        1: FlexColumnWidth(1),
+        2: FlexColumnWidth(1),
+        3: FlexColumnWidth(1),
+      },
       children: [
-        Expanded(
-          child: _buildLessonDetail(
-            "Ders",
-            lesson!.name,
-            "Dersin ismi bulunamadı",
-            screenWidth,
-          ),
-        ),
-        Expanded(
-          child: _buildLessonDetail(
-            "Sınıf",
-            lesson!.place,
-            "Dersin sınıfı bulunamadı",
-            screenWidth,
-          ),
-        ),
-        Expanded(
-          child: _buildLessonDetail(
-            "Gün",
-            lesson!.day,
-            "Gün bilgisi yok",
-            screenWidth,
-          ),
-        ),
+        TableRow(children: [
+          _buildLessonDetail(
+              "Ders", lesson!.name, "Dersin ismi bulunamadı", screenWidth,
+              maxLines: 2),
+          _buildLessonDetail("Öğretmen", lesson!.teacher,
+              "Dersin öğretmeni bulunamadı", screenWidth,
+              maxLines: 2),
+          _buildLessonDetail(
+              "Sınıf", lesson!.place, "Dersin sınıfı bulunamadı", screenWidth,
+              maxLines: 1),
+          _buildLessonDetail("Gün", lesson!.day, "Gün bilgisi yok", screenWidth,
+              maxLines: 1),
+        ])
       ],
     );
   }
 
   Widget _buildLessonDetail(
-      String label, String? value, String fallback, double screenWidth) {
+      String label, String? value, String fallback, double screenWidth,
+      {int maxLines = 3}) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
       child: Column(
@@ -310,8 +305,10 @@ class ShowUpcomingLesson extends StatelessWidget {
           ),
           Text(
             value ?? fallback,
+            maxLines: maxLines,
+            overflow: TextOverflow.ellipsis, // taşmayı engeller
             style: TextStyle(
-              fontSize: screenWidth * 0.035,
+              fontSize: screenWidth * 0.028,
               fontWeight: FontWeight.normal,
               color: Colors.black87,
             ),

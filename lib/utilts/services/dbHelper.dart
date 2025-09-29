@@ -53,7 +53,7 @@ class Dbhelper {
 
   void createDb(Database db, int version) async {
     await db.execute(
-        "Create table lessons(id integer primary key, name text, place text, day text, hour1 text, hour2 text, hour3 text, attendance INTEGER DEFAULT 0, isProcessed INTEGER DEFAULT 0)");
+        "Create table lessons(id integer primary key, name text, place text, day text, hour1 text, hour2 text, teacher text, attendance INTEGER DEFAULT 0, isProcessed INTEGER DEFAULT 0)");
   }
 
   Future<List<Lesson>> getLessons() async {
@@ -85,6 +85,8 @@ class Dbhelper {
 
   void deleteDatabaseFile() async {
     String dbPath = join(await getDatabasesPath(), "timeTable.db");
-    await deleteDatabase(dbPath); // Veritabanını tamamen sil
+    Database db = await openDatabase(dbPath);
+    await db.delete("timeTable");
+    await db.close(); // Veritabanını tamamen sil
   }
 }

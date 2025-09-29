@@ -60,7 +60,6 @@ flutter:
 
   # Varlık dosyalarını tanımlamak için bu kısmı kullanabilirsiniz.
   assets:
-    - assets/db/lessons.db
     - assets/images/agu-logo.png
     - assets/images/Canvas_logo_single_mark.png
     - assets/images/images.png

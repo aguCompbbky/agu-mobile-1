@@ -123,8 +123,8 @@ class _EventsCardState extends State<EventsCard> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Container(
-      height: screenHeight * 0.20,
-      width: screenWidth * 0.75,
+      height: screenHeight * 0.15,
+      width: screenWidth * 0.95,
       // padding: EdgeInsets.all(2.0),
       child: Scaffold(
         backgroundColor: Colors.transparent,

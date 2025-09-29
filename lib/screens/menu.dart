@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:home_page/Feedbacks.dart';
-import 'package:home_page/screens/sisAddLessonsPage.dart';
 import 'package:home_page/screens/sisWeeklyProgram.dart';
 import 'package:home_page/utilts/models/academic.dart';
 import 'package:home_page/utilts/services/apiService.dart';
@@ -57,11 +56,7 @@ class MenuPage extends StatelessWidget {
         icon: Icons.people,
         iconColor: Colors.black,
         page: GelistiricilerScreen()),
-    MenuItem(
-        title: "Sis ders ekleme sayfası",
-        icon: Icons.people,
-        iconColor: Colors.white,
-        page: sisAddLessonsPage()),
+
     MenuItem(
         title: "Sis ders programı",
         icon: Icons.people,
@@ -152,7 +147,7 @@ class _AcademicCalendarScreenState extends State<AcademicCalendarScreen> {
                 .map((e) => {
                       "event": e.event!,
                       "startDate": e.startDate!,
-                      "endDate": e.endDate!
+                      "endDate": e.endDate!,
                     })
                 .toSet()
                 .toList();
@@ -257,11 +252,7 @@ class _AcademicCalendarScreenState extends State<AcademicCalendarScreen> {
   Widget _buildDetailsList(
       String category, Map period, List<Academic> allData) {
     final List<Academic> filteredData = allData.where((item) {
-      return item.category == category &&
-          DateTime.parse(period["endDate"]!)
-              .isAfter(DateTime.parse(item.endDate!)) &&
-          DateTime.parse(period["startDate"]!)
-              .isBefore(DateTime.parse(item.startDate!));
+      return item.category == category && period["event"] == item.term;
     }).toList();
 
     if (filteredData.isEmpty) {
@@ -319,6 +310,8 @@ class PasswordScreen extends StatefulWidget {
 class _PasswordScreenState extends State<PasswordScreen> {
   TextEditingController canvasMail = TextEditingController();
   TextEditingController canvasPassword = TextEditingController();
+  TextEditingController prepCanvasMail = TextEditingController();
+  TextEditingController prepCanvasPassword = TextEditingController();
   TextEditingController zimbraMail = TextEditingController();
   TextEditingController zimbraPassword = TextEditingController();
   TextEditingController sisMail = TextEditingController();
@@ -338,6 +331,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     setState(() {
       canvasMail.text = prefs.getString("canvasMail") ?? "";
       canvasPassword.text = prefs.getString("canvasPassword") ?? "";
+      prepCanvasMail.text = prefs.getString("prepCanvasMail") ?? "";
+      prepCanvasPassword.text = prefs.getString("prepCanvasPassword") ?? "";
       zimbraMail.text = prefs.getString("zimbraMail") ?? "";
       zimbraPassword.text = prefs.getString("zimbraPassword") ?? "";
       sisMail.text = prefs.getString("sisMail") ?? "";
@@ -359,6 +354,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("canvasMail", canvasMail.text);
     await prefs.setString("canvasPassword", canvasPassword.text);
+    await prefs.setString("prepCanvasMail", prepCanvasMail.text);
+    await prefs.setString("prepCanvasPassword", prepCanvasPassword.text);
     await prefs.setString("zimbraMail", zimbraMail.text);
     await prefs.setString("zimbraPassword", zimbraPassword.text);
     await prefs.setString("sisMail", sisMail.text);
@@ -426,6 +423,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     // Bellek sızıntısını önlemek için controller'ları temizle
     canvasMail.dispose();
     canvasPassword.dispose();
+    prepCanvasMail.dispose();
+    prepCanvasPassword.dispose();
     zimbraMail.dispose();
     zimbraPassword.dispose();
     sisMail.dispose();
@@ -440,66 +439,83 @@ class _PasswordScreenState extends State<PasswordScreen> {
         title: const Text("Giriş Bilgileri"),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const Text(
-              "Canvas Bilgileri",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                "Canvas Bilgileri",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            methods.buildTextField(
-                "Canvas Mail", const Icon(Icons.email), canvasMail),
-            const SizedBox(height: 10),
-            methods.buildPasswordField(
-                "Canvas Şifre", const Icon(Icons.lock), canvasPassword),
-            const SizedBox(height: 20),
-            const Text(
-              "Zimbra Bilgileri",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+              const SizedBox(height: 10),
+              methods.buildTextField(
+                  "Canvas Mail", const Icon(Icons.email), canvasMail),
+              const SizedBox(height: 10),
+              methods.buildPasswordField(
+                  "Canvas Şifre", const Icon(Icons.lock), canvasPassword),
+              const SizedBox(height: 20),
+              const Text(
+                "Hazırlık Canvas Bilgileri",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            methods.buildTextField(
-                "Zimbra Mail", const Icon(Icons.email), zimbraMail),
-            const SizedBox(height: 10),
-            methods.buildPasswordField(
-                "Zimbra Şifre", const Icon(Icons.lock), zimbraPassword),
-            const SizedBox(height: 20),
-            const Text(
-              "SIS Bilgileri",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
+              const SizedBox(height: 10),
+              methods.buildTextField(
+                  "Canvas Mail", const Icon(Icons.email), prepCanvasMail),
+              const SizedBox(height: 10),
+              methods.buildPasswordField(
+                  "Canvas Şifre", const Icon(Icons.lock), prepCanvasPassword),
+              const SizedBox(height: 20),
+              const Text(
+                "Zimbra Bilgileri",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            methods.buildTextField(
-                "Öğrenci ID numarası", const Icon(Icons.email), sisMail),
-            const SizedBox(height: 10),
-            methods.buildPasswordField(
-                "SIS Şifre", const Icon(Icons.lock), sisPassword),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton.icon(
-              onPressed: () => saveCredentials(context),
-              icon: const Icon(Icons.save),
-              label: const Text("Kaydet"),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white),
-            ),
-          ],
+              const SizedBox(height: 10),
+              methods.buildTextField(
+                  "Zimbra Mail", const Icon(Icons.email), zimbraMail),
+              const SizedBox(height: 10),
+              methods.buildPasswordField(
+                  "Zimbra Şifre", const Icon(Icons.lock), zimbraPassword),
+              const SizedBox(height: 20),
+              const Text(
+                "SIS Bilgileri",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              const SizedBox(height: 10),
+              methods.buildTextField(
+                  "Öğrenci ID numarası", const Icon(Icons.email), sisMail),
+              const SizedBox(height: 10),
+              methods.buildPasswordField(
+                  "SIS Şifre", const Icon(Icons.lock), sisPassword),
+              const SizedBox(
+                height: 30,
+              ),
+              ElevatedButton.icon(
+                onPressed: () => saveCredentials(context),
+                icon: const Icon(Icons.save),
+                label: const Text("Kaydet"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.indigo,
+                    foregroundColor: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/bottom.dart';
+
+import 'package:home_page/screens/sisLoginPage.dart';
+
 import 'package:home_page/utilts/services/dbHelper.dart';
 import 'package:home_page/utilts/models/lesson.dart';
 import 'package:home_page/lessonDetail.dart';
@@ -46,6 +50,57 @@ class _TimetabledetailState extends State<Timetabledetail> {
         title: const Text("Ders Programı"),
         backgroundColor: Colors.white,
         centerTitle: true,
+        actions: [
+          PopupMenuButton<String>(
+            offset: const Offset(0, 40),
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              if (value == "delete") {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text("Uyarı"),
+                      content: const Text(
+                          "Dersleri gerçekten silmek istediğinize emin misiniz?"),
+                      actions: [
+                        TextButton(
+                            onPressed: Navigator.of(context).pop,
+                            child: const Text("Hayır")),
+                        TextButton(
+                            onPressed: () {
+                              dbHelper.deleteDatabaseFile();
+                              Navigator.pop(context);
+
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text("Bilgilendirme"),
+                                      content: const Text(
+                                          "İşleminiz gerçekleştirilmiştir, ekranı yenileyiniz."),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text("Tamam"),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: const Text("Evet")),
+                      ],
+                    );
+                  },
+                );
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: "delete", child: Text("Dersleri Sil"))
+            ],
+          )
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -80,11 +135,51 @@ class _TimetabledetailState extends State<Timetabledetail> {
                     },
                   ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: goToLessonAdd,
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.lightBlueAccent,
+      floatingActionButton: Builder(
+        builder: (fabContext) {
+          return FloatingActionButton(
+            onPressed: () {
+              final RenderBox button =
+                  fabContext.findRenderObject() as RenderBox;
+              final position = button.localToGlobal(Offset(65, -135));
+              _showFabMenu(fabContext, position);
+            },
+            child: Icon(Icons.add),
+            backgroundColor: Colors.lightBlueAccent,
+          );
+        },
       ),
+    );
+  }
+
+  void _showFabMenu(BuildContext context, Offset position) {
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+
+    showMenu(
+      context: context,
+      position: RelativeRect.fromRect(
+        Rect.fromPoints(position, position),
+        Offset.zero & overlay.size,
+      ),
+      items: [
+        PopupMenuItem(
+          child: ListTile(
+            title: const Text('Manuel Ekle'),
+            onTap: () {
+              goToLessonAdd();
+            },
+          ),
+        ),
+        PopupMenuItem(
+          child: ListTile(
+            title: const Text("Otomatik Al"),
+            onTap: () {
+              methods.navigateToPage(context, Sisloginpage());
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -123,7 +218,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
             ),
             const Divider(),
             SizedBox(
-              height: 200,
+              height: 220,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: dailyLessons.length,
@@ -153,7 +248,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
             borderRadius: BorderRadius.circular(12.0),
           ),
           child: Container(
-            width: 200,
+            width: 250,
             padding: const EdgeInsets.all(12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,10 +260,27 @@ class _TimetabledetailState extends State<Timetabledetail> {
                     Expanded(
                       child: Text(
                         lesson.name ?? "Ders Adı Yok",
+                        maxLines: 1,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    const Icon(Icons.person, color: Colors.white),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        lesson.teacher ?? "Öğretmen adı yok",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
                         ),
                       ),
                     ),
@@ -213,14 +325,6 @@ class _TimetabledetailState extends State<Timetabledetail> {
                                 color: Colors.black,
                               ),
                             ),
-                          if (lesson.hour3 != null && lesson.hour3!.isNotEmpty)
-                            Text(
-                              lesson.hour3!,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                              ),
-                            ),
                         ],
                       ),
                     ),
@@ -229,7 +333,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    const Icon(Icons.person_remove, color: Colors.white),
+                    const Icon(Icons.remove, color: Colors.white),
                     const SizedBox(width: 8),
                     Text(
                       "Devamsızlık = ${lesson.attendance}",
@@ -253,6 +357,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
       context,
       MaterialPageRoute(builder: (context) => LessonAdd()),
     );
+    if (!mounted) return;
     if (result == true) {
       getLessons();
     }
@@ -260,6 +365,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
 
   void getLessons() async {
     var data = await dbHelper.getLessons();
+    if (!mounted) return;
     setState(() {
       lessons = data;
     });
@@ -270,6 +376,7 @@ class _TimetabledetailState extends State<Timetabledetail> {
       context,
       MaterialPageRoute(builder: (context) => LessonDetail(lesson: lesson)),
     );
+    if (!mounted) return;
 
     if (result != null && result == true) {
       getLessons();

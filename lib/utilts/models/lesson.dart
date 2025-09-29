@@ -5,13 +5,13 @@ class Lesson {
   String? day;
   String? hour1;
   String? hour2;
-  String? hour3;
+  String? teacher;
   int attendance = 0; // Varsayılan devamsızlık
   int isProcessed = 0; // Varsayılan olarak işlenmemiş
 
-  Lesson(this.name, this.place, this.day, this.hour1, this.hour2, this.hour3);
+  Lesson(this.name, this.place, this.day, this.hour1, this.hour2, this.teacher);
   Lesson.withID(this.id, this.name, this.place, this.day, this.hour1,
-      this.hour2, this.hour3,
+      this.hour2, this.teacher,
       {this.attendance = 0, this.isProcessed = 0});
 
   Map<String, dynamic> toMap() {
@@ -21,7 +21,7 @@ class Lesson {
     map["day"] = day;
     map["hour1"] = hour1;
     map["hour2"] = hour2;
-    map["hour3"] = hour3;
+    map["teacher"] = teacher;
     map["attendance"] = attendance;
     map["isProcessed"] = isProcessed;
 
@@ -39,7 +39,7 @@ class Lesson {
     day = o["day"];
     hour1 = o["hour1"];
     hour2 = o["hour2"];
-    hour3 = o["hour3"];
+    teacher = o["teacher"];
     attendance = o["attendance"] ?? 0;
     isProcessed = o["isProcessed"] ?? 0;
   }

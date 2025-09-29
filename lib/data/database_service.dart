@@ -28,61 +28,58 @@ extension DbDebug on DatabaseService {
 class DatabaseService {
   DatabaseService._();
   static final DatabaseService I = DatabaseService._();
+
   Database? _db;
 
   Future<Database> get db async {
-    if (_db != null) return _db!;
-    _db = await _open();
+    if (_db == null || !_db!.isOpen) {
+      await ensureReady();
+    }
     return _db!;
   }
 
+  /// Tek doğrusal yol: .../databases/lessons.db
   Future<String> _dbPath() async {
-    final dir = await getApplicationSupportDirectory();
-    return p.join(dir.path, 'lessons.db');
+    final dir = await getDatabasesPath();
+    return p.join(dir, 'lessons.db');
   }
 
-  Future<void> _ensureLocalCopy() async {
-    final dst = await _dbPath();
-    final f = File(dst);
-    if (!await f.exists()) {
-      final bytes = await rootBundle.load('assets/db/lessons.db');
-      await f.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
-    }
-  }
-
-////////////////////////////////////
+  /// Asset'ten kopyala (+ opsiyonel version karşılaştırması)
   Future<void> ensureReady() async {
-    if (_db != null) return;
-    final dbDir = await getDatabasesPath(); // <= DOĞRU KLASÖR
-    final path = p.join(dbDir, 'lessons.db');
-
-    final exists = await databaseExists(path);
-    _db = await openDatabase(
-      path,
-      version: 1,
-      onCreate: (db, v) async {
-        // tablo oluşturma vs.
-      },
-    );
-  }
-
-  Future<void> debugPrintDbInfo() async {
-    final dbDir = await getDatabasesPath();
-    final path = p.join(dbDir, 'lessons.db');
-    final exists = await databaseExists(path);
-    debugPrint('DB exists: $exists, path: $path');
-
-    if (!exists) return; // yoksa length bakmaya çalışma
-    final f = File(path);
-    final len = await f.length();
-    debugPrint('DB size: $len bytes');
-  }
-
-  ///////////////////////////////
-
-  Future<Database> _open() async {
-    await _ensureLocalCopy();
     final path = await _dbPath();
-    return openDatabase(path, readOnly: true);
+
+    // 1) Dosya yoksa, asset'ten kopyala
+    if (!await databaseExists(path)) {
+      await _copyFromAsset(path);
+    }
+
+    // 2) Aç
+    _db = await openDatabase(path);
+
+    // 3) Teşhis logu
+    try {
+      final size = await File(path).length();
+      final tables = await _db!.rawQuery(
+          "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name");
+      debugPrint(
+          'DB path: $path | size: $size bytes | tables: ${tables.map((e) => e['name']).toList()}');
+      for (final t in tables) {
+        final name = t['name'] as String;
+        final c = Sqflite.firstIntValue(
+              await _db!.rawQuery('SELECT COUNT(*) FROM $name'),
+            ) ??
+            0;
+        debugPrint('COUNT($name) = $c');
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _copyFromAsset(String dstPath) async {
+    await Directory(p.dirname(dstPath)).create(recursive: true);
+    final data =
+        await rootBundle.load('assets/db/lessons.db'); // ← senin asset yolun
+    final bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    await File(dstPath).writeAsBytes(bytes, flush: true);
   }
 }
