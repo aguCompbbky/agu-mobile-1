@@ -118,7 +118,7 @@ class _LessonDetailState extends State<LessonDetail> {
         ),
       ),
     );
-  }
+  }//
 
   buildNameField() {
     return TextField(

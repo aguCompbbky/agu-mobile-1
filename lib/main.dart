@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,8 @@ import 'package:home_page/LessonAdd.dart';
 import 'package:home_page/auth.dart';
 import 'package:home_page/buttons/buttons.dart';
 import 'package:home_page/data/database_service.dart';
+import 'package:home_page/init/localization/app_localization.dart';
+import 'package:home_page/init/localization/init_localization.dart';
 import 'package:home_page/profileMenuWidget.dart';
 import 'package:home_page/screens/TimeTableDetail.dart';
 import 'package:home_page/screens/attendance.dart';
@@ -95,18 +98,21 @@ void main() async {
     DeviceOrientation.portraitUp, // Yalnızca dikey mod
     DeviceOrientation.portraitDown,
   ]);
+  InitLocalization.startInitilazition();
+  runApp(AppLocalization(
+    child: MaterialApp(
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false, // İsteğe bağlı: Debug yazısını kaldırır
-    home: const AuthScreen(), // Başlangıç ekranı
-    initialRoute: '/',
-    routes: {
-      '/login': (context) => MyApp(
-            notificationService: NotificationService(),
-          ),
-      // '/AddClass': (context) =>
-      //     AddClassScreen(), // Ders ekleme sayfasını buraya ekliyoruz// Ana ekran (MyHomePage)
-    }, // Ana ekran
+      debugShowCheckedModeBanner: false, // İsteğe bağlı: Debug yazısını kaldırır
+      home: const AuthScreen(), // Başlangıç ekranı
+      initialRoute: '/',
+      routes: {
+        '/login': (context) => MyApp(
+              notificationService: NotificationService(),
+            ),
+        // '/AddClass': (context) =>
+        //     AddClassScreen(), // Ders ekleme sayfasını buraya ekliyoruz// Ana ekran (MyHomePage)
+      }, // Ana ekran
+    ),
   ));
 
   // İlk frame’den sonra arka planda tekrar meta kontrol (UI'ı bekletmeden)
@@ -242,101 +248,107 @@ class _MyAppState extends State<MyApp> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer(); // Drawer'ı açar
-              },
-            );
-          },
-        ),
-        title: Center(
-          child: Image.asset(
-            'assets/images/agu-logo.png',
-            fit: BoxFit.contain,
-            height: 42,
+    return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      home: Scaffold(
+        
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer(); // Drawer'ı açar
+                },
+              );
+            },
           ),
+          title: Center(
+            child: Image.asset(
+              'assets/images/agu-logo.png',
+              fit: BoxFit.contain,
+              height: 42,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    userData != null ? userData!['name'] ?? "İsim yok" : "",
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ShowProfileMenuWidget();
+                        },
+                      );
+                    },
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : imageUrl != null && imageUrl!.isNotEmpty
+                            ? CircleAvatar(
+                                backgroundImage: NetworkImage(imageUrl!),
+                                radius: 28, // Boyutu büyüttük
+                              )
+                            : const Icon(
+                                Icons.account_circle,
+                                size: 44, // Varsayılan ikonu büyüttük
+                                color: Colors.grey,
+                              ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+      
+        drawer: Drawer(
+          child: MenuPage(),
+        ),
+        body: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 255, 255, 255),
+            Color.fromARGB(255, 39, 113, 148),
+            Color.fromARGB(255, 255, 255, 255),
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  userData != null ? userData!['name'] ?? "İsim yok" : "",
-                  style: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.w500),
+                SizedBox(height: screenHeight * 0.20, child: TimeTable_Card()),
+                // SizedBox(
+                //   height: screenHeight * 0.025,
+                // ),
+                RefectoryCard(),
+                SizedBox(
+                  height: screenHeight * 0.025,
                 ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const ShowProfileMenuWidget();
-                      },
-                    );
-                  },
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : imageUrl != null && imageUrl!.isNotEmpty
-                          ? CircleAvatar(
-                              backgroundImage: NetworkImage(imageUrl!),
-                              radius: 28, // Boyutu büyüttük
-                            )
-                          : const Icon(
-                              Icons.account_circle,
-                              size: 44, // Varsayılan ikonu büyüttük
-                              color: Colors.grey,
-                            ),
+                EventsCard(),
+                SizedBox(
+                  height: screenHeight * 0.025,
                 ),
+                Buttons()
               ],
             ),
           ),
-        ],
-      ),
-
-      drawer: Drawer(
-        child: MenuPage(),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Color.fromARGB(255, 255, 255, 255),
-          Color.fromARGB(255, 39, 113, 148),
-          Color.fromARGB(255, 255, 255, 255),
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: screenHeight * 0.20, child: TimeTable_Card()),
-              // SizedBox(
-              //   height: screenHeight * 0.025,
-              // ),
-              RefectoryCard(),
-              SizedBox(
-                height: screenHeight * 0.025,
-              ),
-              EventsCard(),
-              SizedBox(
-                height: screenHeight * 0.025,
-              ),
-              Buttons()
-            ],
-          ),
         ),
+        bottomNavigationBar: bottomBar2(context, 2), // Alt gezinme çubuğu
       ),
-      bottomNavigationBar: bottomBar2(context, 2), // Alt gezinme çubuğu
     );
   }
 

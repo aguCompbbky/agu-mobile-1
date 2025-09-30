@@ -917,7 +917,7 @@ class GelistiricilerScreen extends StatelessWidget {
     {
       "name": "Mustafa Uğur Karaköse",
       "bio":
-          "Merhaba, ben AGÜ'de Bilgisayar Mühendisi 3. sınıf öğrencisiyim. Yapay zeka ve oyun geliştirme üzerine çalışıyorum. Unity ve TensorFlow kullanıyorum. Ek olarak kendimi siber güvenlik konularında geliştirmeye çalışıyorum.",
+          "Ben bilgisayar mühendisliği 3.sınıf öğrencisiyim mobil geliştiricilik ve backende ilgi duyuyorum",
       "image": "assets/images/gelistiriciler/karakose.jpg"
     },
     {
